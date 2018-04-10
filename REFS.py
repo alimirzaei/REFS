@@ -1,3 +1,6 @@
+# Author : Ali Mirzaei
+# Date : 20 / 02 / 1397
+
 
 import numpy as np
 from scipy.spatial.distance import cdist
