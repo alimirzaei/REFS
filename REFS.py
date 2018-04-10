@@ -11,7 +11,7 @@ from tqdm import tqdm
 # load training data
 #X = np.random.randn(10,3)
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
-X = x_test.reshape(10000, -1)
+X = x_test.reshape(10000, -1)[:100,:]
 d = X.shape[1]
 n = X.shape[0]
 
@@ -50,18 +50,18 @@ Q0 = alpha * np.eye(d) + betha * L
 Q_inv[0] = np.linalg.inv(Q0)
 
 print('Start Feature Selection')
-bar = tqdm(total=d*k)
+bar = tqdm(total=k)
 while(i < k):
-    v = 1000*np.ones(d)
+    v = np.inf*np.ones(d)
     while (j < d):
         if(j not in S):
             Q_inv[j] = Q_inv[i] - (gamma * Q_inv[i].dot(np.eye(d)[:,j:j+1]).dot(np.eye(d)[j:j+1,:]).dot(Q_inv[i])) / (1 + gamma*np.eye(d)[j:j+1, :].dot(Q_inv[i]).dot(np.eye(d)[:, j:j+1]))
             v[j] = np.linalg.norm(betha*X.dot(L).dot(Q_inv[j]))
-        bar.update((i+1)*j)
         j = j + 1
     j = v.argmin()
     S = np.append(S, j)
     i = i + 1
+    bar.update(i)
     Q_inv[i] = Q_inv[j]
 
 
